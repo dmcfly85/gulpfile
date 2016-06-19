@@ -23,9 +23,6 @@ gulp.task('watch', function () {
   gulp.watch(paths.dev.html, ['statichtmlfiles:dev']);
   gulp.watch(paths.dev.js, ['bundle']);
   gulp.watch(paths.dev.css, ['staticcssfiles:dev']);
-});
-
-gulp.task('test:watch', function () {
   gulp.watch(paths.dev.test, ['bundle:test']);
 });
 
@@ -38,7 +35,6 @@ gulp.task('staticcssfiles:dev', () => {
   return gulp.src(paths.dev.css)
     .pipe(gulp.dest(paths.build.main));
 });
-
 
 
 gulp.task('bundle', () => {
@@ -56,6 +52,9 @@ gulp.task('bundle', () => {
 
 gulp.task('bundle:test', () => {
   return gulp.src(paths.dev.test)
+  .pipe(plumber({
+    errorHandler: notify.onError('Error: <%= error.message %>')
+  }))
     .pipe(webpack({
       output: {
         filename: 'test_bundle.js'
